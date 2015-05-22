@@ -52,11 +52,8 @@ function Round(el) {
  	 frame.appendChild(canvas);
   	 strokeStyle = 'black';
 
-  	//var computer = confirm("Click 'OK' to play the computer, 'Cancel' to play with a friend");
+  	//var playerMode = confirm("Click 'OK' to play the computer, 'Cancel' to play with a friend");
 
-  	if (playerMode = true) {
-
-  	}
 	for (i in context) {
 		context[i[0] + (i[4] || '')] = context[i];	
  	}
@@ -86,21 +83,16 @@ function Round(el) {
  		 	turn++;
 
 
-
-
-
  		 	if (turn % 2 == 0) {
  		 		loadImages('regina');
  		 		board[move] = -1;
  		 		ref.innerHTML = comments[turn - 1];
- 		 		//return board;
- 		 	} else {
+  		 	} else {
  		 		loadImages('cady');
  		 		board[move] = 1;
  		 		ref.innerHTML = comments[turn - 1];
+  		 	}
 
- 		 		//return board;
- 		 	}
 		 	if (boardStatus() === "main") {
  		 		ref.innerHTML = "Damn Africa, you won!";
 		 		setTimeout(location.reload(), 9000);
@@ -109,7 +101,7 @@ function Round(el) {
 		 		setTimeout(location.reload(), 9000);
 		 	} else if (boardStatus() === "draw") {
 		 		ref.innerHTML = "DRAW";
-		 		setTimeout(location.reload(), 9000);
+		 		//setTimeout(location.reload(), 9000);
 		 	} 
 
   	}
@@ -138,32 +130,23 @@ function Round(el) {
  					var check = combos[combo][i];
  				if (board[check] === 1) {
 					main--;
-					console.log('this is the round ' + combo);
-					console.log('this is main ' + main);
-					console.log('this is current board ' + board);
-
-				} 
-				if (board[check] === -1) {
+					console.log(main + ' this is main');
+				} else if (board[check] === -1) {
 					opp--;
-					console.log('this is the round ' + combo);
-					console.log('this is opp ' + opp);
-					console.log('this is current board ' + board);
+					console.log(opp + ' this is opp');
 				}
 
-				if (opp === -1) {
+				  if (opp === -1) {
 					return "opp";
-				}
-
-				if (main === -1) {
+				} else if (main === -1) {
 					return "main";
-				}
-
-				if ( turn === 9) {
-					return "draw";
-				}
-
+				} 
 
 			}
+		}
+
+		if (turn === 9){
+			return "draw";
 		}
 	}
 
