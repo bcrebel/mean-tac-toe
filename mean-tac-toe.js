@@ -22,7 +22,7 @@ function Round(el) {
 		 "You could try Sears",
 		 "That's just the rules of femenism",
 		 "BOO you whore!",
-		 "You CAN'T sith with us!"],
+		 "You CAN'T sit with us!"],
 	 	sources = {
 	 		cady: 'img/cady.png',
 	 		regina: 'img/regina.png',
@@ -57,8 +57,6 @@ function Round(el) {
 	for (i in context) {
 		context[i[0] + (i[4] || '')] = context[i];	
  	}
-
-
 
 
 	with(context) {
@@ -101,12 +99,10 @@ function Round(el) {
 		 		setTimeout(location.reload(), 9000);
 		 	} else if (boardStatus() === "draw") {
 		 		ref.innerHTML = "DRAW";
-		 		//setTimeout(location.reload(), 9000);
+		 		setTimeout(location.reload(), 9000);
 		 	} 
 
   	}
-
-	
 
 
 	function loadImages(prop) {
@@ -119,8 +115,6 @@ function Round(el) {
 
   		}
 	};
-
-
 
 
 
