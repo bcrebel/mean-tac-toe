@@ -22,7 +22,7 @@ function Round(el) {
 		 "You could try Sears",
 		 "That's just the rules of femenism",
 		 "BOO you whore!",
-		 "You CAN'T sith with us!"],
+		 "You CAN'T sit with us!"],
 	 	sources = {
 	 		cady: 'img/cady.png',
 	 		regina: 'img/regina.png',
@@ -52,12 +52,10 @@ function Round(el) {
  	 frame.appendChild(canvas);
   	 strokeStyle = 'black';
 
-  	//var computer = confirm("Click 'OK' to play the computer, 'Cancel' to play with a friend");
+  	var computerMode = confirm("Click 'OK' to play the computer, 'Cancel' to play with a friend");
 
-  	if (playerMode = true) {
 
-  	}
-	for (i in context) {
+ 	for (i in context) {
 		context[i[0] + (i[4] || '')] = context[i];	
  	}
 
@@ -75,44 +73,67 @@ function Round(el) {
  	}
 
 
+ 	if (computerMode == false) {
+	 	canvas.onclick = function(e) {
+	 		var rect = canvas.getBoundingClientRect();
+			move = ~~((e.pageY - rect.top ) / (canvas.width / 3)) * 3 +
+			 ~~((e.pageX - rect.left) / (canvas.width / 3));
+			 var x = move % 3 * (sizeInt / 3 + context.lineWidth ), y = ~~(move / 3) * (sizeInt / 3 + context.lineWidth);
+	 		 
+	 		 if (!board[move]) {
+	 		 	turn++;
 
- 	canvas.onclick = function(e) {
+
+	 		 	if (turn % 2 == 0) {
+	 		 		loadImages('regina');
+	 		 		board[move] = -1;
+	 		 		ref.innerHTML = comments[turn - 1];
+	 		 		//return board;
+	 		 	} else {
+	 		 		loadImages('cady');
+	 		 		board[move] = 1;
+	 		 		ref.innerHTML = comments[turn - 1];
+
+	 		 		//return board;
+	 		 	}
+			 	if (boardStatus() === "main") {
+	 		 		ref.innerHTML = "Damn Africa, you won!";
+			 		setTimeout(location.reload(), 9000);
+			 	} else if (boardStatus() === "opp") {
+			 		ref.innerHTML = "LOSER";
+			 		setTimeout(location.reload(), 9000);
+			 	} else if (boardStatus() === "draw") {
+			 		ref.innerHTML = "DRAW";
+			 		setTimeout(location.reload(), 9000);
+			 	} 
+
+	  	}
+
+  	}
+
+  	if (computerMode = true) {
+
+  		canvas.onclick = function(e) {
  		var rect = canvas.getBoundingClientRect();
 		move = ~~((e.pageY - rect.top ) / (canvas.width / 3)) * 3 +
 		 ~~((e.pageX - rect.left) / (canvas.width / 3));
 		 var x = move % 3 * (sizeInt / 3 + context.lineWidth ), y = ~~(move / 3) * (sizeInt / 3 + context.lineWidth);
- 		 
- 		 if (!board[move]) {
- 		 	turn++;
 
+		if (!board[move]) {
+			turn++;
+			if (turn % 2 != 0) {
+				loadImages('cady');
+				board[move] = 1;
+				computerMove(0, -1, -sizeInt / 3, sizeInt / 3);
+			}
 
-
-
-
- 		 	if (turn % 2 == 0) {
- 		 		loadImages('regina');
- 		 		board[move] = -1;
- 		 		ref.innerHTML = comments[turn - 1];
- 		 		//return board;
- 		 	} else {
- 		 		loadImages('cady');
- 		 		board[move] = 1;
- 		 		ref.innerHTML = comments[turn - 1];
-
- 		 		//return board;
- 		 	}
-		 	if (boardStatus() === "main") {
- 		 		ref.innerHTML = "Damn Africa, you won!";
-		 		setTimeout(location.reload(), 9000);
-		 	} else if (boardStatus() === "opp") {
-		 		ref.innerHTML = "LOSER";
-		 		setTimeout(location.reload(), 9000);
-		 	} else if (boardStatus() === "draw") {
-		 		ref.innerHTML = "DRAW";
-		 		setTimeout(location.reload(), 9000);
-		 	} 
-
-  	}
+	 		 	if (turn % 2 == 0) {
+	 		 		loadImages('regina');
+	 		 		board[move] = -1;
+	 		 		ref.innerHTML = comments[turn - 1];
+	 		 	}   
+	 	}
+	}
 
 	
 
@@ -132,41 +153,56 @@ function Round(el) {
 
 
 
-	function boardStatus() {
+	function boardStatus(depth) {
 		for (combo in combos) {
-			for (var i = main = opp = 2; i >= 0; i--) {
+			for (var i = main = opp = 3; i >  0; i--) {
  					var check = combos[combo][i];
  				if (board[check] === 1) {
 					main--;
-					console.log('this is the round ' + combo);
-					console.log('this is main ' + main);
-					console.log('this is current board ' + board);
-
-				} 
-				if (board[check] === -1) {
+ 				} else if (board[check] === -1) {
 					opp--;
-					console.log('this is the round ' + combo);
-					console.log('this is opp ' + opp);
-					console.log('this is current board ' + board);
-				}
+ 				}
 
-				if (opp === -1) {
-					return "opp";
-				}
-
-				if (main === -1) {
-					return "main";
-				}
-
-				if ( turn === 9) {
-					return "draw";
-				}
-
+				 if (!opp) {
+					return depth - sizeInt / 3;
+				} else if (!main) {
+					return size - depth;
+				} 
 
 			}
 		}
+
+		if (turn === 9){
+			return "draw";
+		}
 	}
 
+
+
+
+	function computerMove(depth, player, alpha, beta){
+		var i = 9, min = -sizeInt / 3, max, value, next;
+		if (value = boardStatus(depth)) // either player won
+			return value * player;
+ 			while(i--){
+ 				if (!board[i]){
+ 					board[i] = player;
+					 
+					value = -computerMove(depth + 1, -player, -beta, -alpha);
+					board[i] = undef;
+
+
+					if (max === undef || value > max) max = value;
+					if (value > alpha) alpha = value;
+					if (alpha >= beta) return alpha; // prune branch
+					if (max > min){ min = max; next = i; } // best odds for next move
+					console.log('the VALUE is now ' + value);
+
+				}
+			}		
+ 		console.log(next + ' this is next'); 
+		return depth ? max || 0 : next; // 0 is tie game
+	}
 
 
 
