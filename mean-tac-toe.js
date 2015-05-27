@@ -20,7 +20,7 @@ function Round(el) {
 		 "Stop trying to make fetch happen!",
 		  "Vintage, so adorable", 
 		 "You could try Sears",
-		 "That's just the rules of femenism",
+		 "That's just the rules of feminism",
 		 "BOO you whore!",
 		 "You CAN'T sit with us!"],
 	 	sources = {
