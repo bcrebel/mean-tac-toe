@@ -73,7 +73,7 @@ function Round(el) {
  	}
 
 
- 	if (computerMode == false) {
+ 	if (!computerMode) {
 	 	canvas.onclick = function(e) {
 	 		var rect = canvas.getBoundingClientRect();
 			move = ~~((e.pageY - rect.top ) / (canvas.width / 3)) * 3 +
@@ -111,7 +111,7 @@ function Round(el) {
 
   	}
 
-  	if (computerMode = true) {
+  	if (computerMode) {
 
   		canvas.onclick = function(e) {
  		var rect = canvas.getBoundingClientRect();
@@ -157,19 +157,18 @@ function Round(el) {
 		for (combo in combos) {
 			for (var i = main = opp = 3; i >  0; i--) {
  					var check = combos[combo][i];
- 				if (board[check] === 1) {
-					main--;
- 				} else if (board[check] === -1) {
+ 					if (board[check] === 1) {
+						main--;
+ 					} else if (board[check] === -1) {
 					opp--;
- 				}
-
-				 if (!opp) {
-					return depth - sizeInt / 3;
-				} else if (!main) {
-					return size - depth;
-				} 
-
-			}
+ 					}
+				}
+			
+			if (!opp) {
+			computerMode ? depth - sizeInt / 3 : "opp";
+ 				} else if (!main) {
+ 			computerMode ? sizeInt / 3 - depth : "main";
+ 			} 
 		}
 
 		if (turn === 9){
@@ -200,10 +199,11 @@ function Round(el) {
 
 				}
 			}		
- 		console.log(next + ' this is next'); 
-		return depth ? max || 0 : next; // 0 is tie game
+ 			console.log(next + ' this is next'); 
+			return depth ? max || 0 : next; // 0 is tie game
+		}
+
+
+
 	}
-
-
-
 }
