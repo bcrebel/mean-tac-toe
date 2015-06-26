@@ -11,7 +11,8 @@ function Round(el) {
 	  next,
 	 	computerMode,
 	 	size = (0.4 * window.innerWidth) + 'px',
-	 	sizeInt = parseInt(size);
+	 	sizeInt = parseInt(size),
+	 	squareSize = (sizeInt / 3),
 	 	marginCalc = (window.innerWidth) + '%',
 	 	canvas = document.createElement('canvas'),
 	 	context = canvas.getContext('2d'),
@@ -80,8 +81,8 @@ function Round(el) {
 	 		var rect = canvas.getBoundingClientRect();
 			move = Math.floor((e.pageY - rect.top ) / (canvas.width / 3)) * 3 +
 		 	Math.floor((e.pageX - rect.left) / (canvas.width / 3)),
-			x = move % 3 * (sizeInt / 3 + context.lineWidth ),
-			y = Math.floor(move / 3) * (sizeInt / 3 + context.lineWidth);
+			x = move % 3 * (squareSize + context.lineWidth ),
+			y = Math.floor(move / 3) * (squareSize + context.lineWidth);
 	 		 
 	 		if (!board[move]) {
 
@@ -119,8 +120,8 @@ function Round(el) {
 			rect = canvas.getBoundingClientRect(),
  			move = Math.floor((e.pageY - rect.top ) / (canvas.width / 3)) * 3 +
 			Math.floor((e.pageX - rect.left) / (canvas.width / 3)),
-			x = move % 3 * (sizeInt / 3 + context.lineWidth ),
-			y = Math.floor(move / 3) * (sizeInt / 3 + context.lineWidth);
+			x = move % 3 * (squareSize + context.lineWidth ),
+			y = Math.floor(move / 3) * (squareSize + context.lineWidth);
 			
 			if (!board[move]) {
   					
@@ -137,7 +138,7 @@ function Round(el) {
 						ref.innerHTML = comments[turn - 1];
 					}
 		 
- 					next = computerMove(0, -1, (-sizeInt / 3), (sizeInt / 3));
+ 					next = computerMove(0, -1, -squareSize, squareSize);
 
 					board[next] = -1;
 
@@ -192,9 +193,9 @@ function Round(el) {
 			}
 			
 			if (opp === 3) {
-				return computerMode ? (depth - sizeInt / 3) : "opp";
+				return computerMode ? (depth - squareSize) : "opp";
  			} else if (main === 3) {
- 				return computerMode ? (sizeInt / 3 - depth) : "main";
+ 				return computerMode ? (squareSize - depth) : "main";
  			} 
 		}
 
@@ -208,7 +209,7 @@ function Round(el) {
 	//next = computerMove(0, -1, (-sizeInt / 3), (sizeInt / 3));
 	function computerMove(depth, player, alpha, beta){
 		var i = 9, // number of board pieces
-		min = -sizeInt / 3, max, value, next;
+		min = -squareSize, max, value, next;
 		
 		if (value = boardStatus(depth)) { // calculate value from victor
 			return value * player;
@@ -217,12 +218,12 @@ function Round(el) {
  			if (!board[i]){
  				board[i] = player;
 					 
-				value = -computerMove(depth + 1, -player, -beta, -alpha);
+				value = -computerMove(depth + 1, -player, -beta, -alpha); // value of terminal node
 				board[i] = 0;
 
 
-				if (max === undefined || value > max) {max = value;}
-				if (value > alpha) {alpha = value;}
+				if (max === undefined || value > max) {max = value;} //if on max node
+				if (value > alpha) {alpha = value;} // if on min node
 				if (alpha >= beta) {return alpha;} // prune this branch
 				if (max > min){ min = max; next = i; } // best odds for next move
  			}
