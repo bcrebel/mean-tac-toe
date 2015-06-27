@@ -8,7 +8,7 @@ function Round(el) {
 
 
 	var frame,
-	  next,
+	  	next,
 	 	computerMode,
 	 	size = (0.4 * window.innerWidth) + 'px',
 	 	sizeInt = parseInt(size),
@@ -105,8 +105,7 @@ function Round(el) {
 			 		ref.innerHTML = "LOSER";
 			 		restartRound();
 			 	} else if (boardStatus() === "draw") { 
-			 		//boardStatus() === "draw"; 
-			 		ref.innerHTML = "DRAW";
+ 			 		ref.innerHTML = "DRAW";
 			 		restartRound();
 			 	}
 			}
@@ -206,14 +205,14 @@ function Round(el) {
 	};
 
 	// Minimax algorithm with Alpha-Beta Pruning
-	//next = computerMove(0, -1, (-sizeInt / 3), (sizeInt / 3));
-	function computerMove(depth, player, alpha, beta){
+ 	function computerMove(depth, player, alpha, beta){
 		var i = 9, // number of board pieces
 		min = -squareSize, max, value, next;
 		
-		if (value = boardStatus(depth)) { // calculate value from victor
-			return value * player;
+		if (value = boardStatus(depth)) { // terminal node, calculate value
+			return value * player; //heuristic value * color
 		}
+
   		while(i--){
  			if (!board[i]){
  				board[i] = player;
@@ -222,13 +221,15 @@ function Round(el) {
 				board[i] = 0;
 
 
-				if (max === undefined || value > max) {max = value;} //if on max node
-				if (value > alpha) {alpha = value;} // if on min node
-				if (alpha >= beta) {return alpha;} // prune this branch
-				if (max > min){ min = max; next = i; } // best odds for next move
+				if (max === undefined || value > max) { max = value; } //value of this move is better than prior moves
+				if (value > alpha) { alpha = value; }   
+				if (alpha >= beta) { return alpha; } // prune this branch
+				if (max > min) { min = max; next = i; } // max comparison with min determines bestValue,
+				// best odds for next move
  			}
 		}
- 		return depth ? max || 0 : next; // 0 is tie game
+		
+ 		return depth ? max || 0 : next; // 0 for draw
 	}
 
 };
